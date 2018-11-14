@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public GameObject chargeEffect;
     private ParticleSystem activeCharger;
 
+    public Transform footsteps;
+    public GameObject footstep;
+
 	void Start ()
     {
         p = ReInput.players.GetPlayer(0);
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
         canAttack = true;
         canFire = true;
+
+        StartCoroutine(spawnFootstep());
 	}
 	
 	void Update ()
@@ -183,5 +188,20 @@ public class PlayerController : MonoBehaviour
         activeCharger = g.GetComponent<ParticleSystem>();
         yield return new WaitForSeconds(1.5f);
         atkCharged = true;
+    }
+
+    private IEnumerator spawnFootstep()
+    {
+        Vector2 lastFootstepPosition = transform.position;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            if (Vector2.Distance(lastFootstepPosition, transform.position) > 2)
+            {
+                Instantiate(footstep, transform.position, Quaternion.identity, footsteps);
+                lastFootstepPosition = transform.position;
+            }
+        }
     }
 }

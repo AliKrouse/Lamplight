@@ -115,7 +115,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -158,7 +158,7 @@ MonoBehaviour:
   interval: 1
   height: -2.261772
   flying: 0
-  aiming: 1
+  footsteps: []
 --- !u!212 &212714348677520062
 SpriteRenderer:
   m_ObjectHideFlags: 1

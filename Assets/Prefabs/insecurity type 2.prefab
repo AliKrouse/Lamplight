@@ -158,7 +158,7 @@ MonoBehaviour:
   interval: 1
   height: 0
   flying: 1
-  aiming: 1
+  footsteps: []
 --- !u!212 &212562050385495496
 SpriteRenderer:
   m_ObjectHideFlags: 1

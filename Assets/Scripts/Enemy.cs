@@ -24,8 +24,10 @@ public class Enemy : MonoBehaviour
     private Coroutine atk;
 
     public float height;
-    public bool flying, aiming;
+    public bool flying;
     private Vector2 followPos;
+
+    public List<Footstep> footsteps;
 
 	void Start ()
     {
@@ -37,11 +39,33 @@ public class Enemy : MonoBehaviour
 	
 	void Update ()
     {
+        //if (flying)
+        //    followPos = player.transform.position;
+        //else
+        //    followPos = new Vector2(player.transform.position.x, transform.position.y);
         if (flying)
+        {
             followPos = player.transform.position;
+        }
         else
-            followPos = new Vector2(player.transform.position.x, transform.position.y);
-        float d = Vector2.Distance(transform.position, followPos);
+        {
+            if (Vector2.Distance(player.transform.position, transform.position) < 6)
+            {
+                followPos = player.transform.position;
+            }
+            else
+            {
+                if (followPos == null)
+                    SeekFootstep();
+                if (Vector2.Distance(followPos, transform.position) <= float.Epsilon)
+                {
+                    SeekFootstep();
+                }
+            }
+        }
+        Debug.DrawLine(transform.position, followPos, Color.red);
+
+        float d = Vector2.Distance(transform.position, player.transform.position);
         if (d > range)
         {
             transform.position = Vector2.MoveTowards(transform.position, followPos, Time.deltaTime * speed);
@@ -57,35 +81,19 @@ public class Enemy : MonoBehaviour
         if (hp <= 0)
             Die();
 
-        if (aiming)
+        if (player.transform.position.x < transform.position.x)
         {
-            if (player.transform.position.x < transform.position.x)
-            {
-                sr.flipX = false;
-            }
-            if (player.transform.position.x > transform.position.x)
-            {
-                sr.flipX = true;
-            }
-            
-            Vector2 dir = player.transform.position - transform.position;
-            float angle = (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) + 180;
-            attackPath.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            sr.flipX = false;
         }
-        else
+        if (player.transform.position.x > transform.position.x)
         {
-            if (player.transform.position.x < transform.position.x)
-            {
-                sr.flipX = false;
-                attackPath.transform.localScale = new Vector3(-1, 1, 1);
-            }
-            if (player.transform.position.x > transform.position.x)
-            {
-                sr.flipX = true;
-                attackPath.transform.localScale = new Vector3(1, 1, 1);
-            }
+            sr.flipX = true;
         }
-	}
+
+        Vector2 dir = player.transform.position - transform.position;
+        float angle = (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) + 180;
+        attackPath.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
 
     private IEnumerator AttackPlayer()
     {
@@ -105,5 +113,24 @@ public class Enemy : MonoBehaviour
     {
         Instantiate(explosion, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
+    }
+
+    void SeekFootstep()
+    {
+        float lastDistance = 100;
+        int currentLowest = 0;
+        for (int i = 0; i < footsteps.Count; i++)
+        {
+            if (footsteps[i] != null)
+            {
+                if (Vector2.Distance(footsteps[i].gameObject.transform.position, transform.position) < lastDistance)
+                {
+                    lastDistance = Vector2.Distance(footsteps[i].gameObject.transform.position, transform.position);
+                    currentLowest = i;
+                }
+            }
+        }
+        followPos = footsteps[currentLowest].gameObject.transform.position;
+        footsteps.Remove(footsteps[currentLowest]);
     }
 }
