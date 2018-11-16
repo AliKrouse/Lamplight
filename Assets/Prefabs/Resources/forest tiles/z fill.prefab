@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212127874220266550}
   - component: {fileID: 60684471333485350}
   - component: {fileID: 114765494656819962}
+  - component: {fileID: 114482080520525890}
   m_Layer: 9
   m_Name: z fill
   m_TagString: Ground
@@ -74,6 +75,28 @@ PolygonCollider2D:
       - {x: -9, y: -10}
       - {x: 9, y: -10}
       - {x: 10, y: -9}
+--- !u!114 &114482080520525890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1374936521511780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f6fffa2b6992040a23bf78018f6bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trees:
+  - {fileID: 1891730965100402, guid: 715e85d7879505449b661d0c5169eaae, type: 2}
+  tl: 1
+  t: 1
+  tr: 1
+  l: 1
+  r: 1
+  bl: 1
+  b: 1
+  br: 1
+  c: 1
 --- !u!114 &114765494656819962
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -123,7 +146,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -5
+  m_SortingOrder: -32768
   m_Sprite: {fileID: 21300032, guid: 8bf6b94f655522c43a846d30e1a14adb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

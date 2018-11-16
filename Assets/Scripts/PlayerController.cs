@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             if (Vector2.Distance(lastFootstepPosition, transform.position) > 2)
             {
                 Instantiate(footstep, transform.position, Quaternion.identity, footsteps);
