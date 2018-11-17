@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 4802998173115642}
   - component: {fileID: 212599001872270316}
   - component: {fileID: 114100439572981132}
+  - component: {fileID: 114530810634394734}
   m_Layer: 0
-  m_Name: proto tree
+  m_Name: tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,6 +53,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6121747faaea7d64995f0002f9508c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114530810634394734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1891730965100402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1934fddadd8568e418b327608740cc73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trees:
+  - {fileID: 21300000, guid: bbcf98bbfd4c20c4995e17c90128a981, type: 3}
 --- !u!212 &212599001872270316
 SpriteRenderer:
   m_ObjectHideFlags: 1
