@@ -4,95 +4,37 @@ using UnityEngine;
 
 public class SpawnTrees : MonoBehaviour
 {
-    public GameObject[] trees;
+    private SpriteRenderer sr;
+    private RandomizeTree rt;
+    private OrganizeRenderer or;
 
-    public bool tl, t, tr, l, r, bl, b, br, c;
-    private float minY, maxY, minX, maxX;
+    private GameObject player;
+
+    private bool active;
 
 	void Start ()
     {
-        if (tl)
-        {
-            minY = transform.position.y + 3.3f;
-            maxY = transform.position.y + 10;
-            minX = transform.position.x - 10;
-            maxX = transform.position.x - 3.3f;
-            Spawn();
-        }
-        if (t)
-        {
-            minY = transform.position.y + 3.3f;
-            maxY = transform.position.y + 10;
-            minX = transform.position.y - 3.3f;
-            maxX = transform.position.x + 3.3f;
-            Spawn();
-        }
-        if (tr)
-        {
-            minY = transform.position.y + 3.3f;
-            maxY = transform.position.y + 10;
-            minX = transform.position.x + 3.3f;
-            maxX = transform.position.x + 10;
-            Spawn();
-        }
-        if (l)
-        {
-            minY = transform.position.y - 3.3f;
-            maxY = transform.position.y + 3.3f;
-            minX = transform.position.x - 10;
-            maxX = transform.position.x - 3.3f;
-            Spawn();
-        }
-        if (r)
-        {
-            minY = transform.position.y - 3.3f;
-            maxY = transform.position.y + 3.3f;
-            minX = transform.position.x + 3.3f;
-            maxX = transform.position.x + 10;
-            Spawn();
-        }
-        if (bl)
-        {
-            minY = transform.position.y - 10;
-            maxY = transform.position.y - 3.3f;
-            minX = transform.position.x - 10;
-            maxX = transform.position.x - 3.3f;
-            Spawn();
-        }
-        if (b)
-        {
-            minY = transform.position.y - 10;
-            maxY = transform.position.y - 3.3f;
-            minX = transform.position.x - 3.3f;
-            maxX = transform.position.x + 3.3f;
-            Spawn();
-        }
-        if (br)
-        {
-            minY = transform.position.y - 10;
-            maxY = transform.position.y - 3.3f;
-            minX = transform.position.x + 3.3f;
-            maxX = transform.position.x + 10;
-            Spawn();
-        }
-        if (c)
-        {
-            minY = transform.position.y - 3.3f;
-            maxY = transform.position.y + 3.3f;
-            minX = transform.position.x - 3.3f;
-            maxX = transform.position.x + 3.3f;
-            Spawn();
-        }
+        sr = GetComponent<SpriteRenderer>();
+        rt = GetComponent<RandomizeTree>();
+        or = GetComponent<OrganizeRenderer>();
+        player = GameObject.FindGameObjectWithTag("Player");
 	}
 
-    private void Spawn()
+    private void Update()
     {
-        for (int i = 0; i < 20; i++)
+        if (Vector2.Distance(transform.position, player.transform.position) < 12 && !active)
         {
-            float yPos = Random.Range(minY, maxY);
-            float xpos = Random.Range(minX, maxX);
-            int randomTree = Random.Range(0, trees.Length);
-            Instantiate(trees[randomTree], new Vector2(xpos, yPos), Quaternion.identity, transform);
+            sr.enabled = true;
+            rt.enabled = true;
+            or.enabled = true;
+            active = true;
+        }
+        if (Vector2.Distance(transform.position, player.transform.position) >= 12 && active)
+        {
+            sr.enabled = false;
+            rt.enabled = false;
+            or.enabled = false;
+            active = false;
         }
     }
 }

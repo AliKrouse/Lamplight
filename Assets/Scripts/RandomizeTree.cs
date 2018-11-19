@@ -9,9 +9,10 @@ public class RandomizeTree : MonoBehaviour
     
 	void Start ()
     {
+        trees = Resources.LoadAll<Sprite>("tree clumps");
         sr = GetComponent<SpriteRenderer>();
         int randomTree = Random.Range(0, trees.Length);
         sr.sprite = trees[randomTree];
-        Destroy(this);
+        this.enabled = false;
 	}
 }
