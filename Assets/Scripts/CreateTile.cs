@@ -44,7 +44,7 @@ public class CreateTile : MonoBehaviour
         bool foundTile = false;
         foreach (GameObject g in forest)
         {
-            if (Vector2.Distance(g.transform.position, spawnPoint) < float.Epsilon)
+            if (Vector3.Distance(g.transform.position, spawnPoint) < float.Epsilon)
                 foundTile = true;
         }
         return foundTile;

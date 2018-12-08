@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
         Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = mousepos - transform.position;
         float angle = (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
             transform.GetChild(i).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
