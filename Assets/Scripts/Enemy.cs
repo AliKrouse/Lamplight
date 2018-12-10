@@ -29,12 +29,16 @@ public class Enemy : MonoBehaviour
 
     public List<Footstep> footsteps;
 
+    private Animator anim;
+
 	void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         attackPath = transform.GetChild(0).gameObject;
         player = GameObject.FindGameObjectWithTag("Player");
+
+        anim = GetComponent<Animator>();
 	}
 	
 	void Update ()
@@ -71,11 +75,15 @@ public class Enemy : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, followPos, Time.deltaTime * speed);
             if (atk != null)
                 StopCoroutine(atk);
+
+            anim.SetBool("moving", true);
         }
         else
         {
             if (atk == null)
                 atk = StartCoroutine(AttackPlayer());
+
+            anim.SetBool("moving", false);
         }
 
         if (hp <= 0)
@@ -99,6 +107,7 @@ public class Enemy : MonoBehaviour
     {
         while (true)
         {
+            anim.SetTrigger("attack");
             GameObject f = Instantiate(flame, transform.position, Quaternion.identity);
             f.GetComponent<Attack>().path = new Transform[path.Length];
             for (int i = 0; i < path.Length; i++)
