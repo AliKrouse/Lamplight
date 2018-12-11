@@ -6,10 +6,13 @@ public class CreateTile : MonoBehaviour
 {
     public GameObject[] tiles;
     private Vector2 spawnPoint;
+
+    private TileManager tm;
     
 	void Start ()
     {
         spawnPoint = transform.GetChild(0).position;
+        tm = GameObject.FindGameObjectWithTag("Player").GetComponent<TileManager>();
 	}
 	
 	void Update ()
@@ -25,11 +28,12 @@ public class CreateTile : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Instantiate(tiles[RandomTile()], spawnPoint, Quaternion.identity);
+            tm.CreateEnemies(spawnPoint);
 
-            for (int i = 0; i < transform.parent.childCount; i++)
-            {
-                transform.parent.GetChild(i).gameObject.SetActive(false);
-            }
+            //for (int i = 0; i < transform.parent.childCount; i++)
+            //{
+            //    transform.parent.GetChild(i).gameObject.SetActive(false);
+            //}
         }
     }
 

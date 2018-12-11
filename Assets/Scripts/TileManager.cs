@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
-    public static float dangerLevel;
+    public float dangerLevel;
     public float dlIncrease;
+
+    private GameObject[] enemyConfigs;
+    private List<GameObject> availableConfigs;
     
 	void Start ()
     {
+        enemyConfigs = Resources.LoadAll<GameObject>("Enemy Tiles");
+        dangerLevel = 1;
     }
 
     void Update()
@@ -24,5 +29,22 @@ public class TileManager : MonoBehaviour
                 Destroy(g);
             }
         }
+    }
+
+    void SetAvailableConfigs()
+    {
+        availableConfigs.Clear();
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].GetComponent<TileTags>().dangerLevel <= dangerLevel)
+                availableConfigs.Add(enemyConfigs[i]);
+        }
+    }
+
+    public void CreateEnemies(Vector2 spawnPoint)
+    {
+        SetAvailableConfigs();
+        int randomConfig = Random.Range(0, availableConfigs.Count);
+        Instantiate(availableConfigs[randomConfig], spawnPoint, Quaternion.identity);
     }
 }
