@@ -6,25 +6,33 @@ using UnityEngine.UI;
 public class Events : MonoBehaviour
 {
     private Button b1, b2, b3;
-    private Text t;
 
     public static int friendship;
     public static int skill;
     public string[] buttonText;
+    public string[] positiveResults;
+    public string[] negativeResults;
+    public Text resultsText;
 
     public Clearing clearing;
+
+    private PlayerController player;
 
     private void OnEnable()
     {
         b1 = transform.GetChild(0).GetComponent<Button>();
         b2 = transform.GetChild(1).GetComponent<Button>();
         b3 = transform.GetChild(2).GetComponent<Button>();
-        t = transform.GetChild(3).GetChild(0).GetComponent<Text>();
 
         b1.onClick.RemoveAllListeners();
         b2.onClick.RemoveAllListeners();
         b3.onClick.RemoveAllListeners();
         StartCoroutine(SetOptions());
+
+        friendship = 60;
+        skill = 60;
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
     private IEnumerator SetOptions()
@@ -63,31 +71,103 @@ public class Events : MonoBehaviour
 
     public void Friends()
     {
-        clearing.Continue();
+        int roll = Random.Range(1, 101);
+        if (roll <= friendship)
+        {
+            player.maxHp += 1;
+            friendship += 5;
+            StartCoroutine(ShowResults(positiveResults[0]));
+        }
+        else
+        {
+            player.maxHp -= 1;
+            friendship -= 5;
+            StartCoroutine(ShowResults(negativeResults[0]));
+        }
+
+        clearing.Stand();
     }
 
     public void Help()
     {
-        clearing.Continue();
+        int roll = Random.Range(1, 101);
+        roll -= (roll / 2);
+        if (roll <= friendship)
+        {
+            friendship += 10;
+            StartCoroutine(ShowResults(positiveResults[1]));
+        }
+        else
+        {
+            player.maxHp -= 2;
+            friendship -= 10;
+            StartCoroutine(ShowResults(negativeResults[1]));
+        }
+
+        clearing.Stand();
     }
 
     public void Hobby()
     {
-        clearing.Continue();
+        int roll = Random.Range(1, 101);
+        if (roll <= skill)
+        {
+            player.hp += 1;
+            skill += 5;
+            StartCoroutine(ShowResults(positiveResults[2]));
+        }
+        else
+        {
+            player.hp -= 1;
+            skill -= 5;
+            StartCoroutine(ShowResults(negativeResults[2]));
+        }
+
+        clearing.Stand();
     }
 
     public void Create()
     {
-        clearing.Continue();
+        int roll = Random.Range(1, 101);
+        roll -= (roll / 2);
+        if (roll <= skill)
+        {
+            player.hp += 1;
+            player.maxHp += 1;
+            skill += 10;
+            StartCoroutine(ShowResults(positiveResults[3]));
+        }
+        else
+        {
+            player.maxHp -= 2;
+            skill -= 10;
+            StartCoroutine(ShowResults(negativeResults[3]));
+        }
+
+        clearing.Stand();
     }
 
     public void Therapy()
     {
-        clearing.Continue();
+        player.hp -= 1;
+        player.maxHp += 1;
+        StartCoroutine(ShowResults(positiveResults[4]));
+        clearing.Stand();
     }
 
     public void Rest()
     {
-        clearing.Continue();
+        player.hp += 2;
+        friendship -= 5;
+        skill -= 5;
+        StartCoroutine(ShowResults(positiveResults[5]));
+        clearing.Stand();
+    }
+
+    private IEnumerator ShowResults(string result)
+    {
+        resultsText.text = result;
+        yield return new WaitForSeconds(3);
+        resultsText.text = "";
     }
 }

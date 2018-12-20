@@ -4,92 +4,30 @@ using UnityEngine;
 
 public class Clearing : MonoBehaviour
 {
-    private Transform playerPoint, leavingPoint;
-    bool Continuing;
-    private PlayerController player;
-
-    public GameObject lastForest;
-    public GameObject forest, clearing;
-
-    public float minLength, maxLength;
-    public static int level;
-
-    public GameObject ui;
+    private GameObject interact;
+    private GameObject player;
+    public Events events;
 
 	void Start ()
     {
-        playerPoint = transform.GetChild(0);
-        leavingPoint = transform.GetChild(1);
+        interact = transform.GetChild(0).gameObject;
+        player = GameObject.FindGameObjectWithTag("Player");
+        events = GameObject.FindGameObjectWithTag("GameController").GetComponent<Events>();
 	}
 	
 	void Update ()
     {
-        if (Continuing)
+        if (Input.GetKeyDown(KeyCode.E) && interact.activeSelf)
         {
-            player.gameObject.transform.position = Vector2.MoveTowards(player.gameObject.transform.position, leavingPoint.position, Time.deltaTime * player.speed);
+            Sit();
         }
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    Continue();
-    }
-
-    public void Continue()
-    {
-        Continuing = true;
-        Debug.Log("continuing");
-
-        Destroy(lastForest);
-
-        GameObject f = Instantiate(forest, transform.position, Quaternion.identity);
-        float length = Random.Range(minLength, maxLength);
-        f.GetComponent<SpriteRenderer>().size = new Vector2(length, 9);
-        f.GetComponent<BoxCollider2D>().size = new Vector2(length - 10, 9);
-        f.GetComponent<CapsuleCollider2D>().offset = new Vector2(-length / 2, 0);
-        float xPos = transform.position.x + 9 + (length / 2);
-        f.transform.position = new Vector2(xPos, 0.98f);
-        f.GetComponent<Forest>().lastClearing = this.gameObject;
-        float percent = Random.Range(1, 100);
-        int level = 1;
-        if (percent <= 40)
-            level = 1;
-        if (percent > 40 && percent <= 80)
-            level = 2;
-        if (percent > 80)
-            level = 3;
-        f.GetComponent<Forest>().dangerLevel = level;
-        Debug.Log("created level " + level + " forest");
-
-        GameObject c = Instantiate(clearing, transform.position, Quaternion.identity);
-        float xPos2 = f.transform.position.x + (length / 2) + 9;
-        c.transform.position = new Vector2(xPos2, 0.98f);
-        c.GetComponent<Clearing>().lastForest = f;
-        c.GetComponent<Clearing>().ui = ui;
-
-        ui.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            lastForest.GetComponent<Forest>().StopAllCoroutines();
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject e in enemies)
-                e.GetComponent<Enemy>().Die();
-
-            ui.SetActive(true);
-            ui.GetComponent<Events>().clearing = this;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            player = collision.GetComponent<PlayerController>();
-            player.enabled = false;
-            if (!Continuing)
-                collision.gameObject.transform.position = Vector2.MoveTowards(collision.transform.position, playerPoint.position, Time.deltaTime * player.speed);
+            interact.SetActive(true);
         }
     }
 
@@ -97,8 +35,39 @@ public class Clearing : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.enabled = true;
+            interact.SetActive(false);
+        }
+    }
+
+    private void Sit()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject e in enemies)
+        {
+            e.GetComponent<Enemy>().Die();
+        }
+
+        interact.SetActive(false);
+        player.GetComponent<PlayerController>().enabled = false;
+        events.enabled = true;
+        events.clearing = this;
+
+        for (int i = 0; i < 3; i++)
+        {
+            events.gameObject.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void Stand()
+    {
+        interact.SetActive(false);
+        player.GetComponent<PlayerController>().enabled = true;
+        events.enabled = false;
+        this.enabled = false;
+
+        for (int i = 0; i < 3; i++)
+        {
+            events.gameObject.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 }
